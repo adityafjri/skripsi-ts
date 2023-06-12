@@ -1,0 +1,33 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["jsonProtocol"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+}
+
+model ListUndang {
+    id          Int         @id   @default(autoincrement())
+    judul       String     
+    tentang     String
+}
+
+model GraphEdge {
+    id          Int         @id   @default(autoincrement())
+    src         String
+    dst         String
+}
+
+model Revisi {
+    id          Int         @id   @default(autoincrement())
+    uuBaru      String
+    uuLama      String    
+}
+
+
