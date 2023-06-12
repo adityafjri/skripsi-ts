@@ -1,61 +1,61 @@
 import React from "react";
 import { GetServerSideProps } from "next";
 import ListUndang, { ListUndangProps } from "../components/Post";
-import prisma from '../lib/prisma';
+// import prisma from '../lib/prisma';
 import Router from "next/router";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 
 const PAGE_SIZE = 30; // Number of items to fetch per page
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const searchTerm = Array.isArray(context?.params?.search)
-    ? context?.params?.search[0]
-    : "";
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const searchTerm = Array.isArray(context?.params?.search)
+//     ? context?.params?.search[0]
+//     : "";
 
-  try {
-    // Get the total count of matching records
-    const totalCount = await prisma.listUndang.count({
-      where: {
-        judul: {
-          contains: searchTerm,
-        },
-      },
-    });
+//   try {
+//     // Get the total count of matching records
+//     const totalCount = await prisma.listUndang.count({
+//       where: {
+//         judul: {
+//           contains: searchTerm,
+//         },
+//       },
+//     });
 
-    // Calculate the number of pages based on the total count and page size
-    const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+//     // Calculate the number of pages based on the total count and page size
+//     const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
-    // Generate a random page number
-    const randomPage = Math.floor(Math.random() * totalPages) + 1;
+//     // Generate a random page number
+//     const randomPage = Math.floor(Math.random() * totalPages) + 1;
 
-    // Fetch the data for the random page with pagination
-    const feed = await prisma.listUndang.findMany({
-      take: PAGE_SIZE,
-      skip: (randomPage - 1) * PAGE_SIZE,
-      where: {
-        judul: {
-          contains: searchTerm,
-        },
-      },
-    });
+//     // Fetch the data for the random page with pagination
+//     const feed = await prisma.listUndang.findMany({
+//       take: PAGE_SIZE,
+//       skip: (randomPage - 1) * PAGE_SIZE,
+//       where: {
+//         judul: {
+//           contains: searchTerm,
+//         },
+//       },
+//     });
 
-    return {
-      props: {
-        feed,
-        searchTerm,
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return {
-      props: {
-        feed: [],
-        searchTerm,
-      },
-    };
-  }
-};
+//     return {
+//       props: {
+//         feed,
+//         searchTerm,
+//       },
+//     };
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//     return {
+//       props: {
+//         feed: [],
+//         searchTerm,
+//       },
+//     };
+//   }
+// };
 
 type Props = {
   feed: ListUndangProps[];
