@@ -8,7 +8,7 @@
   "scripts": {
     "prisma:generate": "prisma generate",
     "dev": "next -p 8080",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start -p 8080"
   },
   "keywords": [],
