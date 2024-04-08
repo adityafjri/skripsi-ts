@@ -2,53 +2,23 @@
 import Highcharts from "highcharts";
 import networkgraph from "highcharts/modules/networkgraph";
 import HighchartsReact from "highcharts-react-official";
-
-import { useState } from 'react';
+import { useRouter } from "next/router";
 
 // memastikan komponen yang di-render benar, agar tidak terjadi kesalahan pada proses hidrasi
 if (typeof Highcharts === "object") {
   networkgraph(Highcharts);
 }
 
-// dummy data
-const data = [
-    { from: 'A', to: 'B' },
-    { from: 'A', to: 'C' },
-    { from: 'A', to: 'D' },
-    { from: 'A', to: 'E' },
-    { from: 'A', to: 'F' },
-    { from: 'A', to: 'G' },
-    { from: 'B', to: 'C' },
-  ];
-
-
 // konfigurasi chart yang dicoba
-export default function Chart() {
-    const [searchValue, setSearchValue] = useState('')
-    const [filteredData, setFilteredData] = useState([])
 
-    const handleSearch = (e) => {
-        const inputValue = e.target.value
-        setSearchValue(inputValue)
-        console.log('Input Value:', inputValue)
-
-        // filter data berdasarkan input form
-        const filteredNodes = data.filter(
-            (node) =>
-                node?.from?.toLowerCase()?.includes(inputValue.toLowerCase()) ||
-                node?.to?.toLowerCase()?.includes(inputValue.toLowerCase())
-                
-        )
-        console.log('Filtered Data:', filteredNodes);
-        
-        setFilteredData(filteredNodes)
-    }
-
-    const handleNodeClick = (e) => {
+export default function Chart(data) {
+  const router = useRouter()
+      const handleNodeClick = (e) => {
         const node = e.point.name
         console.log('Clicked Node:', node)
-    }
-
+        const pdfUrl = `03Tugas-GraphAlgorithm2.pdf`
+        window.open(`/${pdfUrl}`, '_blank')
+      }
     const options = {
         chart: {
           type: "networkgraph",
@@ -88,35 +58,25 @@ export default function Chart() {
                 linkFormat: "",
                 allowOverlap: true,
                 style:{
-                    fontSize: '18px'
+                    fontSize: '12px'
                 }
             },
             id: "lang-tree",
-            data: filteredData.length > 0 ? filteredData : data,
+            data: data['data'],
             events: {
-                click: handleNodeClick,
+              click: handleNodeClick,
             }
           }
         ]
     };
 
-    if (filteredData.length > 0) {
-        options.series[0].data = filteredData;
-    }
+  
     
     return(
         <div>
-            <form action="#" className="my-4">
-                <label htmlFor="input-node">Cari Node</label>
-                <input type="text" name="input-node" placeholder="cari node" className="border border-black py-2 w-full px-4"
-                    value={searchValue}
-                    onChange={handleSearch}
-                />
-            </form>
+           
             <div className="w-auto">
-                {searchValue ? (
-                    <HighchartsReact highcharts={Highcharts} options={options}/>
-                ) : null}
+                <HighchartsReact highcharts={Highcharts} options={options}/>
             </div>
         </div>
     )
